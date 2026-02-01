@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Tests 💗</title>
+<style>
+body{
+  margin:0;
+  font-family:"Segoe UI",sans-serif;
+  background:linear-gradient(135deg,#ffe4ec,#ffc0d9);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+.card{
+  background:#fff;
+  width:95%;
+  max-width:440px;
+  padding:25px;
+  border-radius:22px;
+  box-shadow:0 15px 40px rgba(255,105,180,.3);
+  text-align:center;
+}
+.screen{display:none;}
+.active{display:block;}
+h1{color:#d63384;font-size:20px;margin-bottom:15px;}
+p{color:#c2185b;margin-bottom:15px;}
+button{
+  width:100%;
+  padding:13px;
+  margin:6px 0;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#ff69b4,#ff85c1);
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+.tests{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:20px;
+}
+.test{
+  background:#fff0f6;
+  padding:20px 10px;
+  border-radius:18px;
+  font-weight:bold;
+  color:#d63384;
+  box-shadow:0 5px 15px rgba(255,105,180,.3);
+  cursor:pointer;
+}
+.done{background:#d1ffd8;color:#1b7f3a;}
+.loader{
+  width:100%;
+  height:12px;
+  background:#ffe0eb;
+  border-radius:6px;
+  overflow:hidden;
+  margin-top:20px;
+}
+.loader div{
+  height:100%;
+  width:0;
+  background:#ff69b4;
+  animation:load 5s linear forwards;
+}
+@keyframes load{to{width:100%}}
+.resultBox{
+  background:#fff0f6;
+  border-radius:14px;
+  padding:15px;
+  margin:15px 0;
+  text-align:left;
+  font-weight:bold;
+  color:#d63384;
+}
+@media(max-width:500px){
+  h1{font-size:18px;}
+  button{font-size:15px;padding:12px;}
+  .tests{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+
+<!-- НАЧАЛО -->
+<div class="screen active" id="s1">
+<h1>Ваше имя Медина? 💗</h1>
+<button onclick="show('s2')">Да</button>
+<button onclick="show('err')">Нет</button>
+</div>
+
+<div class="screen" id="err">
+<h1>Вы ошиблись 😢</h1>
+<button onclick="show('s1')">Назад</button>
+</div>
+
+<div class="screen" id="s2">
+<h1>Ваш парень Мусин Никита? 💕</h1>
+<button onclick="show('smile')">Да</button>
+<button onclick="show('smile')">Конечно</button>
+<button onclick="show('smile')">Люблю его 💖</button>
+</div>
+
+<!-- УЛЫБКА + ЗАГРУЗКА -->
+<div class="screen" id="smile">
+<h1>😊😊😊</h1>
+<p>Улыбнитесь</p>
+<div class="loader"><div></div></div>
+<p id="check" style="display:none;font-size:25px;">✅</p>
+</div>
+
+<!-- ГЛАВНЫЙ ЭКРАН -->
+<div class="screen" id="main">
+<h1>Имя: Медина 💗</h1>
+<div class="tests">
+<div class="test" id="t1" onclick="startTest1()">Тест 1<br>Мы знаем друг друга</div>
+<div class="test" id="t2" onclick="startTest(test2,'t2')">Тест 2<br>Характер</div>
+<div class="test" id="t3" onclick="startTest(test3,'t3')">Тест 3<br>Быт</div>
+</div>
+<p id="result1"></p>
+</div>
+
+<!-- ВОПРОСЫ -->
+<div class="screen" id="q"></div>
+
+<!-- РЕЗУЛЬТАТ -->
+<div class="screen" id="res">
+<h1>Результат 💗</h1>
+<div class="resultBox" id="resultText"></div>
+<p>Заскринь 📸</p>
+<button onclick="show('main')">На главный экран</button>
+</div>
+
+<!-- ЭКРАН НЕПРАВИЛЬНО -->
+<div class="screen" id="fail">
+<h1>😢</h1>
+<p>Неправильно</p>
+<button onclick="finish1()">Назад на главный экран</button>
+</div>
+
+</div>
+
+<script>
+// ---------- ОБЩЕЕ ----------
+function show(id){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+if(id==="smile"){
+document.getElementById("check").style.display="none";
+setTimeout(()=>{
+document.getElementById("check").style.display="block";
+},5000);
+setTimeout(()=>show("main"),6000);
+}
+}
+
+// ---------- ТЕСТ 1 ----------
+let errors=0,step1=0;
+const test1=[
+{q:"Дата начала наших отношений?",a:["20 марта","24 мая","26 мая"],r:2},
+{q:"Какого животного год Никиты?",a:["Бык","Змея","Лошадь"],r:0},
+{q:"День рождения Никиты?",a:["6 июня","5 июля","5 июня"],r:1},
+{q:"Что бы выбрал Никита?",a:["Шашлык","Пиццу","Донер"],r:0},
+{q:"Сколько человек в семье Никиты?",a:["6","8","7"],r:2},
+{q:"Любимый сезон?",a:["Лето","Зима","Осень"],r:1},
+{q:"Имя папы?",a:["Владимир","Вячеслав","Дмитрий"],r:1},
+{q:"Балл пробника?",a:["80","81","82"],r:1}
+];
+
+function startTest1(){
+errors=0;
+step1=0;
+showQ1();
+}
+
+function showQ1(){
+let q=test1[step1];
+let h=`<h1>${q.q}</h1>`;
+q.a.forEach((x,i)=>h+=`<button onclick="ans1(${i})">${x}</button>`);
+document.getElementById("q").innerHTML=h;
+show("q");
+}
+
+function ans1(i){
+if(i===test1[step1].r){
+step1++;
+if(step1<test1.length){
+showQ1();
+}else{
+finish1();
+}
+}else{
+errors++;
+show("fail");
+}
+}
+
+function finish1(){
+document.getElementById("t1").classList.add("done");
+document.getElementById("result1").innerText="Тест 1 пройден 💖 Ошибок: "+errors;
+show("main");
+}
+
+// ---------- ТЕСТЫ 2 и 3 ----------
+let step=0,answers=[],currentTest=[],curBtn="";
+function startTest(arr,btn){
+step=0;answers=[];currentTest=arr;curBtn=btn;showQuestion();
+}
+function showQuestion(){
+let q=currentTest[step];
+let html=`<h1>${q.q}</h1>`;
+q.a.forEach((x,i)=>html+=`<button onclick="answer(${i+1})">${x}</button>`);
+document.getElementById("q").innerHTML=html;
+show("q");
+}
+function answer(choice){
+answers.push(choice);
+step++;
+step<currentTest.length ? showQuestion() : finish();
+}
+function finish(){
+let text="";
+answers.forEach((a,i)=>{text+=`${i+1} – ${a}<br>`});
+document.getElementById("resultText").innerHTML=text;
+document.getElementById(curBtn).classList.add("done");
+show("res");
+}
+
+// ---------- ДАННЫЕ ----------
+const test2=[
+{q:"Главная черта характера?",a:["Добрый","Весёлый","Понимающий"]},
+{q:"Реакция на стресс?",a:["Драка","Бегство","Ступор"]},
+{q:"Больше всего боюсь?",a:["Разлуку","Расстояние","Потерю связи"]},
+{q:"Оптимист или пессимист?",a:["Оптимист","Пессимист"]},
+{q:"Легко ли меня обидеть?",a:["Да","Нет"]},
+{q:"Планирование или спонтанность?",a:["Планирование","Спонтанность"]},
+{q:"Лучшее качество партнёра?",a:["Разум","Эмоции","Сдержанность"]},
+{q:"Худшая привычка?",a:["Многословие","Возвышение"]},
+{q:"Доверчивый или подозрительный?",a:["Доверчивый","Подозрительный"]},
+{q:"Лучшая мотивация?",a:["Похвала","Вызов"]}
+];
+
+const test3=[
+{q:"Любимый утренний напиток?",a:["Кофе","Сок","Чай"]},
+{q:"Душ или ванна?",a:["Душ","Ванна"]},
+{q:"Совесть или честность?",a:["Совесть","Честность"]},
+{q:"Бытовой раздражитель?",a:["Дети","Дела","Обязанности"]},
+{q:"Любимый день недели?",a:["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]},
+{q:"Завтракаю всегда?",a:["Да","Нет"]},
+{q:"Порядок или беспорядок?",a:["Порядок","Беспорядок"]},
+{q:"Перед сном?",a:["Моюсь","Ем","Пишу Никитке"]},
+{q:"Кофе с сахаром?",a:["Да","Нет","С Никитой"]},
+{q:"Холод или жара?",a:["Холод","Никита"]}
+];
+</script>
+
+</body>
+</html>
